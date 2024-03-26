@@ -1,5 +1,8 @@
 # Methods-to-process-excel-data
-This projects include all methods for me to process excel data, I uploaded these for recording or may help someone.
+# Author: Jing Yang
+# Contact: jyangcm@connect.ust.hk
+
+This projects include all methods for me to process excel data in R, I uploaded these for recording or may help someone.
 
 For the code "How to calculate the average of 24 sheets in an excel"
 
