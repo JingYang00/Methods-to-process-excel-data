@@ -1,0 +1,63 @@
+#Author: Jing Yang
+#Time: 26 Mar 2024
+
+library(readxl)
+library(dplyr)
+setwd("/Users/yangjing/Desktop/R code/")
+
+# Initialize an empty dataframe to store data from all tables
+# The empty dataframe cannot use cbind(), because the length of empty dataframe is 0, so we should set a number as long as the other dataframes.
+all_data_x <- data.frame(1:67501)
+list <- c("A","B","C","D")
+
+# x -----------------------------------------------------------------------
+
+# Suppose your Excel file is named "data.xlsx" and the two columns in each table are "Column1" and "Column2"
+for (j in list) {
+  for (i in 1:6) {
+    # If the worksheet names are not named regularly like this, they need to be adjusted accordingly.
+    sheet_name_x <- paste("Track-",j, i, "-Subject 1", sep = "")
+
+    # Read worksheet
+    sheet_data_x <- read_excel("Rawdata_P.xlsx", sheet = sheet_name_x) 
+    sheet_data_x <- sheet_data_x[-c(1:35),]
+
+    # Extract the required two columns of data
+    selected_data_x <- sheet_data_x %>% select(3)
+    
+    # Append the extracted data to all_data
+    all_data_x <- cbind(all_data_x, selected_data_x)
+  }
+}
+
+all_data_x <- all_data_x[, -c(1)]
+all_data_x <- as.data.frame(lapply(all_data_x,as.numeric))
+
+
+names(all_data_x) <- c("x1","x2","x3","x4","x5","x6","x7","x8","x9","x10","x11","x12",
+                     "x13","x14","x15","x16","x17","x18","x19","x20","x21","x22","x23","x24")
+
+new_x <- rowMeans(all_data_x, na.rm = TRUE) %>% as.data.frame()
+
+
+# y -----------------------------------------------------------------------
+
+all_data_y <- data.frame(1:67501)
+for (j in list) {
+  for (i in 1:6) {
+    sheet_name_y <- paste("Track-",j, i, "-Subject 1", sep = "") 
+    sheet_data_y <- read_excel("Rawdata_P.xlsx", sheet = sheet_name_y) 
+    sheet_data_y <- sheet_data_y[-c(1:35),]
+    selected_data_y <- sheet_data_y %>% select(4)
+    all_data_y <- cbind(all_data_y, selected_data_y)
+  }
+}
+all_data_y <- all_data_y[, -c(1)]
+all_data_y <- as.data.frame(lapply(all_data_y, as.numeric))
+names(all_data_y) <- c("y1","y2","y3","y4","y5","y6","y7","y8","y9","y10","y11","y12",
+                       "y13","y14","y15","y16","y17","y18","y19","y20","y21","y22","y23","y24")
+new_y <- rowMeans(all_data_y, na.rm = TRUE) %>% as.data.frame()
+
+result <- cbind(new_x,new_y)
+names(result) <- c("x","y")
+write.csv(result,"Rawdata_P_xy.csv")
