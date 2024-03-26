@@ -1,0 +1,80 @@
+#Author: Jing Yang
+#Time: 26 Mar 2024
+#Contact: jyangcm@connect.ust.hk
+
+library(tidyverse)
+setwd("/Users/yangjing/Desktop/R code/")
+
+# database ----------------------------------------------------------------
+
+# Create a string vector containing data
+dt_t <- read.delim("Rawdata_52results.txt") %>% 
+  t() %>% as.data.frame() %>% rownames_to_column() %>% t() %>% as.data.frame()
+
+dt_t_a <- cbind(dt_t[c(1:91),],dt_t[c(106:196),],dt_t[c(211:301),],
+                dt_t[c(316:406),],dt_ts[c(421:511),],dt_t[c(526:616),])
+dt_t_b <- cbind(dt_t[c(631:721),],dt_t[c(736:826),],dt_t[c(841:931),],
+                dt_t[c(946:1036),],dt_t[c(1051:1141),],dt_t[c(1156:1246),])
+dt_t_c <- cbind(dt_t[c(1261:1351),],dt_t[c(1366:1456),],dt_t[c(1471:1561),],
+                dt_t[c(1576:1666),],dt_t[c(1681:1771),],dt_t[c(1786:1876),])
+dt_t_d <- cbind(dt_t[c(1891:1981),],dt_t[c(1996:2086),],dt_t[c(2101:2191),],
+                dt_t[c(2206:2296),],dt_t[c(2311:2401),],dt_t[c(2416:2506),])
+
+# Make a loop to calculate the average -------------------------------------------------------------------
+
+# Initialize an empty vector to store the extracted data
+a_extracted_data <- numeric()
+
+# Loop through the data string vector and extract the data part
+for (i in 1:length(dt_t_a)) {
+  if (grepl("\\[1\\] ", dt_t_a[i])) {
+    a_split_data <- strsplit(dt_t_a[i], " ")[[1]]  # Split string
+    a_extracted_value <- as.numeric(a_split_data[length(a_split_data)])  # Extract the numerical part
+    a_extracted_data <- c(a_extracted_data, a_extracted_value)  # Store extracted data
+  }
+}
+
+# Output extracted data
+a_extracted_data <- matrix(a_extracted_data,ncol = 6)
+t_a <- rowMeans(a_extracted_data) %>% as.data.frame()
+names(t_a) <- c("t_a")
+
+
+b_extracted_data <- numeric()
+for (i in 1:length(dt_t_b)) {
+  if (grepl("\\[1\\] ", dt_t_b[i])) {
+    b_split_data <- strsplit(dt_t_b[i], " ")[[1]]
+    b_extracted_value <- as.numeric(b_split_data[length(b_split_data)])
+    b_extracted_data <- c(b_extracted_data, b_extracted_value)
+  }
+}
+b_extracted_data <- matrix(b_extracted_data,ncol = 6)
+t_b <- rowMeans(b_extracted_data) %>% as.data.frame()
+names(t_b) <- c("t_b")
+
+c_extracted_data <- numeric()
+for (i in 1:length(dt_t_c)) {
+  if (grepl("\\[1\\] ", dt_t_c[i])) {
+    c_split_data <- strsplit(dt_t_c[i], " ")[[1]]
+    c_extracted_value <- as.numeric(c_split_data[length(c_split_data)])
+    c_extracted_data <- c(c_extracted_data, c_extracted_value)
+  }
+}
+c_extracted_data <- matrix(c_extracted_data,ncol = 6)
+t_c <- rowMeans(c_extracted_data) %>% as.data.frame()
+names(t_c) <- c("t_c")
+
+d_extracted_data <- numeric()
+for (i in 1:length(dt_t_d)) {
+  if (grepl("\\[1\\] ", dt_t_d[i])) {
+    d_split_data <- strsplit(dt_t_d[i], " ")[[1]]
+    d_extracted_value <- as.numeric(d_split_data[length(d_split_data)])
+    d_extracted_data <- c(d_extracted_data, d_extracted_value)
+  }
+}
+d_extracted_data <- matrix(d_extracted_data,ncol = 6)
+t_d <- rowMeans(d_extracted_data) %>% as.data.frame()
+names(t_d) <- c("t_d")
+
+df_all <- cbind(t_a,t_b,t_c,t_d)
+write_csv(df_all,"Rawdata_45results_avg.csv")
