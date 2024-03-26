@@ -1,5 +1,6 @@
 # Methods-to-process-excel-data
 #Author: Jing Yang
+
 #Contact: jyangcm@connect.ust.hk
 
 This projects include all methods for me to process excel data in R, I uploaded these for recording or may help someone.
