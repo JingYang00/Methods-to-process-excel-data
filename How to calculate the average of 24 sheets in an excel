@@ -1,5 +1,6 @@
 #Author: Jing Yang
 #Time: 26 Mar 2024
+#Contact: jyangcm@connect.ust.hk
 
 library(readxl)
 library(dplyr)
@@ -12,14 +13,13 @@ list <- c("A","B","C","D")
 
 # x -----------------------------------------------------------------------
 
-# Suppose your Excel file is named "data.xlsx" and the two columns in each table are "Column1" and "Column2"
 for (j in list) {
   for (i in 1:6) {
     # If the worksheet names are not named regularly like this, they need to be adjusted accordingly.
     sheet_name_x <- paste("Track-",j, i, "-Subject 1", sep = "")
 
     # Read worksheet
-    sheet_data_x <- read_excel("Rawdata_P.xlsx", sheet = sheet_name_x) 
+    sheet_data_x <- read_excel("Rawdata.xlsx", sheet = sheet_name_x) 
     sheet_data_x <- sheet_data_x[-c(1:35),]
 
     # Extract the required two columns of data
@@ -46,7 +46,7 @@ all_data_y <- data.frame(1:67501)
 for (j in list) {
   for (i in 1:6) {
     sheet_name_y <- paste("Track-",j, i, "-Subject 1", sep = "") 
-    sheet_data_y <- read_excel("Rawdata_P.xlsx", sheet = sheet_name_y) 
+    sheet_data_y <- read_excel("Rawdata.xlsx", sheet = sheet_name_y) 
     sheet_data_y <- sheet_data_y[-c(1:35),]
     selected_data_y <- sheet_data_y %>% select(4)
     all_data_y <- cbind(all_data_y, selected_data_y)
@@ -60,4 +60,5 @@ new_y <- rowMeans(all_data_y, na.rm = TRUE) %>% as.data.frame()
 
 result <- cbind(new_x,new_y)
 names(result) <- c("x","y")
-write.csv(result,"Rawdata_P_xy.csv")
+write.csv(result,"Rawdata_xy.csv")
+
